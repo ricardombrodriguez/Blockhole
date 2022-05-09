@@ -33,7 +33,7 @@ class Game {
 
     constructor() {
 
-        /*
+        
         const LEVEL1 = {
             board: [["start", "simple", "simple", "void", "void", "void", "void", "void", "void", "void"],
             ["simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "void", "void"],
@@ -76,7 +76,7 @@ class Game {
             light: [50,450,-470]
         };
 
-        */
+        
     
         const LEVEL4 = {
             board: [["void", "void", "void", "void", "void", "void", "void", "void", "void", "void","void", "void", {activator: "vertical" , tiles: [[6,4]] }],
@@ -108,9 +108,9 @@ class Game {
         */
 
         this.LEVELS = [
-            //LEVEL1,
-            //LEVEL2,
-            //LEVEL3,
+            LEVEL1,
+            LEVEL2,
+            LEVEL3,
             LEVEL4,
             //LEVEL5
         ];
