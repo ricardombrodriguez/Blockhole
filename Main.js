@@ -118,7 +118,7 @@ class Game {
         this.scene = new THREE.Scene();
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.setClearColor(new THREE.Color(0xdddddd));
+        this.renderer.setClearColor(new THREE.Color(0x87CEEB ));
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.shadowMap.enabled = true;
@@ -712,15 +712,15 @@ const HORIZONTAL_DISPLAY = 0.5 * Math.PI;
 // ============================================== //
 
 
-function onWindowResize() {
+// function onWindowResize() {
 
-    renderer.setSize( window.innerWidth, window.innerHeight );
+//     renderer.setSize( window.innerWidth, window.innerHeight );
 
-    camera.aspect = window.innerWidth / window.innerHeight;
+//     camera.aspect = window.innerWidth / window.innerHeight;
 
-    camera.updateProjectionMatrix();
+//     camera.updateProjectionMatrix();
 
-}
+// }
 
 let main = new Main();
 let game = main.game;
@@ -731,4 +731,4 @@ function move(event) {
 
 document.addEventListener("keydown", move, false); 
 
-window.addEventListener('resize', onWindowResize, false);
+//window.addEventListener('resize', onWindowResize, false);
