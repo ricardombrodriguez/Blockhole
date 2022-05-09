@@ -7,8 +7,8 @@ activate/deactivate bridge (done)
 fragile tile (done)
 down animation (done)
 game/level stats -> current level, moves
-lights and shadows
-camera and light position for each level
+lights and shadows (done)
+camera and light position for each level (done)
 block movement/animation (done)
 retry level button
 about/tutorial modal
@@ -128,11 +128,10 @@ class Game {
         this.renderer.shadowMapType = THREE.PCFSoftShadowMap; 
         document.body.appendChild(this.renderer.domElement);
 
-        
-
         // Start level
         this.currentLevel = 0;
         this.level = new Level(this.LEVELS[0],this);
+
     }
 
     nextLevel() {
@@ -220,7 +219,7 @@ class Level {
             setTimeout(() => {
                 this.game.retryLevel();
             }, 1000);
-        
+
         } else {
 
             this.verifyActivator();
@@ -233,7 +232,7 @@ class Level {
 
         }
 
-    }retryLevel
+    }
 
     verifyFail() {
 
@@ -261,10 +260,6 @@ class Level {
             let tile = this.board[coord[1]][coord[0]];
             
             if (tile.type === "vertical" && this.block.inVertical() || tile.type === "horizontal") {
-
-                console.log("activated")
-
-                console.log(tile.bridges)
 
                 for (let i = 0; i < tile.bridges.length; i++) {
 
@@ -333,7 +328,6 @@ class Level {
     blockFall() {
 
         let step = 1;
-
         let level = this;
         let scene = this.game.scene;
         let renderer = this.game.renderer;
@@ -370,11 +364,7 @@ class Tile {
         this.hidden = true;
         this.game = game;
 
-        if (bridges != null) {
-            console.log(this.type);
-            console.log(bridges);
-            this.bridges = bridges;
-        }
+        if (bridges != null) this.bridges = bridges;
 
         if (type !== "void" && type !== "hole" && type !== "bridge") {
 
@@ -384,30 +374,20 @@ class Tile {
 
             if (type === "vertical") {
 
-                let boxGeometry = new THREE.BoxBufferGeometry(TILE_SIZE-1,10 ,TILE_WIDTH+1);
-                let boxMaterial = new THREE.MeshPhongMaterial({ color: 0x00ff11 });
+                let x = - coords[0] * TILE_SIZE;
+                let y = - TILE_WIDTH / 2;
+                let z = - coords[1] * TILE_SIZE;      
 
-                // Make an 'X'
+                this.boxA = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z);
+                this.boxA.rotation.x = -0.5 * Math.PI; 
+                this.game.scene.add(this.boxA);
 
-                let boxA = new THREE.Mesh(boxGeometry, boxMaterial);
-                boxA.rotation.y = -0.5 * Math.PI / 2; 
-                boxA.position.x = - coords[0] * TILE_SIZE;
-                boxA.position.y = - TILE_WIDTH / 2;
-                boxA.position.z = - coords[1] * TILE_SIZE;
+                this.boxB = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z);
+                this.boxB.rotation.x = 0.5 * Math.PI; 
+                this.game.scene.add(this.boxB);
 
-                let boxB = new THREE.Mesh(boxGeometry, boxMaterial);
-                boxB.rotation.y = 0.5 * Math.PI / 2;
-                boxB.position.x = - coords[0] * TILE_SIZE;
-                boxB.position.y = - TILE_WIDTH / 2;
-                boxB.position.z = - coords[1] * TILE_SIZE;
-
-                boxA.receiveShadow = true;
-                boxA.castShadow = true;
-                boxB.receiveShadow = true;
-                boxB.castShadow = true;
-
-                this.game.scene.add(boxA);
-                this.game.scene.add(boxB);
+                this.game.scene.add(this.boxA);
+                this.game.scene.add(this.boxB);
 
             }
 
@@ -437,58 +417,24 @@ class Tile {
         if (type === "start") color = 0x000000;
         if (type === "fragile") color = 0xfa8072;
 
-        // TILE BOX
+        let x = - this.coords[0] * TILE_SIZE;
+        let y = - TILE_WIDTH / 2;
+        let z = - this.coords[1] * TILE_SIZE;
 
-        this.boxGeometry = new THREE.BoxBufferGeometry(TILE_SIZE,TILE_SIZE,TILE_WIDTH);
-        this.boxMaterial = new THREE.MeshPhongMaterial({ color:color });
-        this.box = new THREE.Mesh(this.boxGeometry, this.boxMaterial);
+        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,color,x,y,z);
         this.box.rotation.x = -0.5 * Math.PI; 
-
-        this.box.position.x = - coords[0] * TILE_SIZE;
-        this.box.position.y = - TILE_WIDTH / 2;
-        this.box.position.z = - coords[1] * TILE_SIZE;
-
-        // TILE BOX OUTLINE
-
-        this.edgesGeometry = new THREE.EdgesGeometry( this.boxGeometry );
-        this.edgesMaterial = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1.5 } );
-        this.wireframeBox = new THREE.LineSegments( this.edgesGeometry, this.edgesMaterial );
-        this.wireframeBox.renderOrder = 1;
-        this.box.add(this.wireframeBox);
-
-        this.box.receiveShadow = true;
-        this.box.castShadow = true;
-
         this.game.scene.add(this.box);
     }
 
     // Show bridge tile
     activateBridge() {
 
-        console.log("activating bridge", this)
+        let x = - this.coords[0] * TILE_SIZE;
+        let y = - TILE_WIDTH / 2;
+        let z = - this.coords[1] * TILE_SIZE;
 
-        let color = 0x26705c; // 0x36981b
-
-        this.boxGeometry = new THREE.BoxBufferGeometry(TILE_SIZE,TILE_SIZE,TILE_WIDTH);
-        this.boxMaterial = new THREE.MeshPhongMaterial({ color:color });
-        this.box = new THREE.Mesh(this.boxGeometry, this.boxMaterial);
+        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,0x26705c,x,y,z);
         this.box.rotation.x = -0.5 * Math.PI; 
-
-        this.box.position.x = - this.coords[0] * TILE_SIZE;
-        this.box.position.y = - TILE_WIDTH / 2;
-        this.box.position.z = - this.coords[1] * TILE_SIZE;
-
-        // TILE BOX OUTLINE
-
-        this.edgesGeometry = new THREE.EdgesGeometry( this.boxGeometry );
-        this.edgesMaterial = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1.5 } );
-        this.wireframeBox = new THREE.LineSegments( this.edgesGeometry, this.edgesMaterial );
-        this.wireframeBox.renderOrder = 1;
-        this.box.add(this.wireframeBox);
-
-        this.box.receiveShadow = true;
-        this.box.castShadow = true;
-
         this.game.scene.add(this.box);
 
         this.hidden = false;
@@ -544,26 +490,11 @@ class Block {
 
     placeBlock(scene) {
 
-        this.cubeGeometry = new THREE.BoxBufferGeometry(TILE_SIZE,TILE_SIZE*2,TILE_SIZE);
-        this.cubeMaterial = new THREE.MeshPhongMaterial({ color: 0x991199, wireframe: false });	// Wireframe allows to represent the edges onl
+        let x = - this.coords[0][0] * TILE_SIZE;
+        let y = TILE_SIZE;
+        let z = - this.coords[0][1] * TILE_SIZE;
 
-        // BLOCK
-        this.block = new THREE.Mesh(this.cubeGeometry, this.cubeMaterial);
-        this.block.position.x = - this.coords[0][0] * TILE_SIZE;
-        this.block.position.y = TILE_SIZE;
-        this.block.position.z = - this.coords[0][1] * TILE_SIZE;
-
-        // BLOCK OUTLINE
-
-        this.edgesGeometry = new THREE.EdgesGeometry( this.cubeGeometry );
-        this.edgesMaterial = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
-        this.wireframeBox = new THREE.LineSegments( this.edgesGeometry, this.edgesMaterial );
-        this.wireframeBox.renderOrder = 1;
-        this.block.add(this.wireframeBox);
-
-        this.block.castShadow = true;
-        this.block.receiveShadow = true;
-
+        this.block = createBox(TILE_SIZE,TILE_SIZE*2,TILE_SIZE,0x991199,x,y,z);
         scene.add(this.block);
 
     }  
@@ -730,6 +661,28 @@ let game = main.game;
 
 function move(event) {
     game.level.moveBlock(event);
+}
+
+function createBox(width,height,depth,color,x,y,z) {
+
+    let cubeGeometry = new THREE.BoxBufferGeometry(width,height,depth);
+    let cubeMaterial = new THREE.MeshPhongMaterial({ color: color, wireframe: false });	// Wireframe allows to represent the edges onl
+
+    // BLOCK
+    let block = new THREE.Mesh(cubeGeometry,cubeMaterial);
+    block.position.set(x,y,z);
+
+    // BLOCK OUTLINE
+    let edgesGeometry = new THREE.EdgesGeometry(cubeGeometry );
+    let edgesMaterial = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 1 } );
+    let wireframeBox = new THREE.LineSegments(edgesGeometry,edgesMaterial );
+    wireframeBox.renderOrder = 1;
+    block.add(wireframeBox);
+
+    block.castShadow = true;
+    block.receiveShadow = true;
+
+    return block;
 }
 
 document.addEventListener("keydown", move, false); 
