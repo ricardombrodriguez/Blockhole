@@ -93,9 +93,9 @@ class Game {
             light: [-100,450,-520]
         };
 
-        /*
-        const LEVEL5 = 
-            [["void", "void", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "void","void","void"],
+        
+        const LEVEL5 = {
+            board: [["void", "void", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "void","void","void"],
             ["void", "void", "simple", "simple", "simple", "void", "void", "void", "void", "void","void", "void","void","void"],
             ["void", "void", "simple", "simple", {activator: "horizontal" , tiles: [[13,2],[13,3]]}, "void", "void","void", "void", "void","simple", "simple", "simple","bridge"],
             ["void", "void", "void", "simple", "simple", "simple", "simple", "void", "void", "void","simple", "hole", "simple","bridge"],
@@ -104,15 +104,18 @@ class Game {
             ["simple", "simple",  {activator: "vertical" , tiles: [[8,4],[9,4]]}, "simple", "simple", "simple", "simple", "simple", "void", "void","void", "void", "void","void"],
             ["simple", "start", "simple", "void", "void", "void", "simple", "simple", "void", "void","void", "simple", "simple","simple"],
             ["simple", "simple", "simple", "void", "void", "void", "simple", "simple", "simple", "simple","simple", "simple", "simple","simple"],
-            ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple"]];
-        */
+            ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple"]],
+            camera: [-250,280,-580],
+            light: [50,450,50]
+        };
+        
 
         this.LEVELS = [
             LEVEL1,
             LEVEL2,
             LEVEL3,
             LEVEL4,
-            //LEVEL5
+            LEVEL5
         ];
         
         this.scene = new THREE.Scene();
