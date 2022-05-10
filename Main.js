@@ -1,21 +1,5 @@
 // ==================== CLASSES/ENTITIES ================== //
 
-/*
-TODO:
-resize event
-wait for move to end
-activate/deactivate bridge (done)
-fragile tile (done)
-down animation (done)
-game/level stats -> current level, moves (done)
-lights and shadows (done)
-camera and light position for each level (done)
-block movement/animation (done)
-retry level button (done)
-about/tutorial modal
-*/
-
-
 class Main {
 
     constructor() {
@@ -23,29 +7,50 @@ class Main {
     }
 
     startGame() {
-        return new Game();
+        return new Game(this);
     }
 
 }
 
 class Game {
 
-    constructor() {
+    constructor(main) {
 
-        
-        // const LEVEL1 = {
-        //     board: [["start", "simple", "simple", "void", "void", "void", "void", "void", "void", "void"],
-        //     ["simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "void", "void"],
-        //     ["simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void"],
-        //     ["void", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple"],
-        //     ["void", "void", "void", "void", "void", "simple", "simple", "hole", "simple", "simple"],
-        //     ["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "void"]],
-        //     camera: [-250,300,-500],
-        //     light: [-50,300,-500]
-        // };
-/* 
-        
+        const LEVEL1 = {
+            board: [["start", "simple", "simple", "void", "void", "void", "void", "void", "void", "void"],
+            ["simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "void", "void"],
+            ["simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void"],
+            ["void", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple"],
+            ["void", "void", "void", "void", "void", "simple", "simple", "hole", "simple", "simple"],
+            ["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "void"]],
+            camera: [-250,300,-500],
+            light: [-50,300,-500]
+        }; 
+
         const LEVEL2 = {
+            board: [["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
+            ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", {activator: "vertical" , tiles: [[10,4],[11,4]]}, "simple","void", "void", "simple", "hole", "simple"],
+            ["simple", "simple", {activator: "horizontal" , tiles: [[4,4],[5,4]]}, "simple", "void", "void", "simple", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
+            ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
+            ["simple", "start", "simple", "simple", "bridge", "bridge", "simple", "simple", "simple", "simple","bridge", "bridge", "simple", "simple", "simple"],
+            ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "simple","void", "void", "void", "void", "void"]],
+            camera: [-300,350,-530], 
+            light: [-1000,700,0] 
+        };  
+
+        const LEVEL3 = {
+            board: [["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "simple","simple", "simple", "simple", "void", "void"],
+            ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "void","void", "simple", "simple", "void", "void"],
+            ["simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void","void", "simple", "simple", "simple", "simple"],
+            ["simple", "start", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "hole", "simple"],
+            ["simple", "simple", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "simple", "simple"],
+            ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void","void", "void", "simple", "simple", "simple"]],
+            camera: [-300,350,-530], 
+            light: [180,250,-400] 
+        };  
+        
+        
+        const LEVEL4 = {
             board: [["void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple", "simple", "void", "void", "void"],
             ["void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple", "simple", "void", "void", "void"],
             ["simple", "simple", "simple", "void", "void", "void", "void", "void", "simple", "void","void", "simple", "simple", "simple", "simple"],
@@ -56,11 +61,9 @@ class Game {
             ["void", "void", "simple", "simple", "simple", "simple", "simple", "simple", "void", "void","void", "void", "void", "void", "void"]],
             camera: [-300,350,-530], 
             light: [-1000,700,0] 
-        };
- */
-        
+        };  
 
-        const LEVEL3 = {
+        const LEVEL5 = {
             board: [["simple", "simple", "simple", "fragile", "simple", "simple", "simple", "simple", "fragile", "simple","simple", "simple", "simple", "void"],
             ["simple", "simple", "void", "void", "void", "void", "void", "void", "void", "void","simple", "simple", "simple", "void"],
             ["simple", "simple", "void", "void", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "simple"],
@@ -75,9 +78,7 @@ class Game {
             light: [50,450,-470]
         };
 
-        
-    
-        const LEVEL4 = {
+        const LEVEL6 = {
             board: [["void", "void", "void", "void", "void", "void", "void", "void", "void", "void","void", "void", {activator: "vertical" , tiles: [[6,4]] }],
             ["void", "void", "void", "void", "void", "simple", "simple", "simple", "void", "void","simple", "simple", "simple"],
             ["void", "void", "void", "void", "void", "simple", {activator: "vertical" , tiles: [[12,2]]}, "simple", "simple", "simple","simple", "simple", "bridge"],
@@ -92,8 +93,7 @@ class Game {
             light: [-100,450,-520]
         };
 
-        
-        const LEVEL5 = {
+        const LEVEL7 = {
             board: [["void", "void", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "void","void","void"],
             ["void", "void", "simple", "simple", "simple", "void", "void", "void", "void", "void","void", "void","void","void"],
             ["void", "void", "simple", "simple", {activator: "horizontal" , tiles: [[13,2],[13,3]]}, "void", "void","void", "void", "void","simple", "simple", "simple","bridge"],
@@ -108,15 +108,17 @@ class Game {
             light: [50,450,50]
         };
         
-
         this.LEVELS = [
             //LEVEL1,
             //LEVEL2,
-            LEVEL3,
-            LEVEL4,
-            LEVEL5
+            //LEVEL3,
+            //LEVEL4,
+            //LEVEL5,
+            //LEVEL6,
+            LEVEL7
         ];
         
+        this.main = main;
         this.scene = new THREE.Scene();
 
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -124,7 +126,7 @@ class Game {
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.shadowMap.enabled = true;
-        this.renderer.shadowMapType = THREE.PCFSoftShadowMap; 
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
         document.body.appendChild(this.renderer.domElement);
 
         // Start level
@@ -132,11 +134,20 @@ class Game {
         this.moves = 0;
         this.level = new Level(this.LEVELS[0],this);
 
+        // Reference - https://stackoverflow.com/questions/20290402/three-js-resizing-canvas
+        window.addEventListener( 'resize', onWindowResize, false );
+
+        function onWindowResize() {
+            main.game.level.camera.aspect = window.innerWidth / window.innerHeight;
+            main.game.level.camera.updateProjectionMatrix();
+            main.game.renderer.setSize( window.innerWidth, window.innerHeight );
+        }
+
     }
 
     nextLevel() {
         this.clearScene();
-        if (this.currentLevel + 1 >= this.level.length) {
+        if (this.currentLevel + 1 === this.LEVELS.length) {
             this.endGame();
         } else {
             this.currentLevel += 1;
@@ -151,8 +162,23 @@ class Game {
     }
 
     endGame() {
-        console.log("END GAME")
-        alert("END GAME")
+        let modal = new bootstrap.Modal(document.getElementById("endGame"), {});
+        modal.show();
+        let main = this.main;
+
+        document.getElementById('playAgain').addEventListener("click", function() {
+            main.game.resetGame();
+        });
+        
+    }
+
+    resetGame() {
+        this.clearScene();
+        this.currentLevel = 0;
+        this.moves = 0;
+        document.getElementById("level").innerHTML = this.currentLevel + 1;
+        document.getElementById("moves").innerHTML = this.moves;
+        this.level = new Level(this.LEVELS[0],this);
     }
 
     clearScene() {
@@ -197,8 +223,8 @@ class Level {
         this.light.position.set(x,y,z);
         this.light.castShadow = true;
         this.light.receiveShadow = true;        
-        this.light.shadowMapWidth = 2048; 
-        this.light.shadowMapHeight = 2048; 
+        this.light.shadow.mapSize.width = 2048; 
+        this.light.shadow.mapSize.height = 2048; 
         this.game.scene.add(this.light);
         this.game.renderer.render(this.game.scene, this.camera);
     }
@@ -206,11 +232,11 @@ class Level {
     moveBlock(event) {
 
         var keyCode = event.which;  // JS key id
-        this.block.setBlockPosition(this, keyCode);
-        this.game.moves += 1;
-        this.levelMoves += 1;
+        if (this.block.setBlockPosition(this, keyCode)) {
+            this.game.moves += 1;
+            this.levelMoves += 1;
+        };
         this.verifyMove();
-        listenForMoves();
         document.getElementById("moves").innerHTML = this.game.moves;
 
     }
@@ -280,8 +306,6 @@ class Level {
                         activateTile.activateBridge();
 
                     } else {
-
-                        console.log(activateTile)
 
                         activateTile.closeBridge();
 
@@ -400,8 +424,8 @@ class Tile {
 
             if (type === "horizontal") {
 
-                let geometry = new THREE.CylinderGeometry( TILE_SIZE/2-5, TILE_SIZE/2-5, TILE_WIDTH+1, 62 );
-                let material = new THREE.MeshPhongMaterial( {color: 0x7a2f9a} );
+                let geometry = new THREE.CylinderGeometry( TILE_SIZE/2-5, TILE_SIZE/2-5, TILE_WIDTH+5, 62 );
+                let material = new THREE.MeshPhongMaterial( {color: 0x1111ee} );
                 let cylinder = new THREE.Mesh( geometry, material );
 
                 cylinder.position.x = - coords[0] * TILE_SIZE;
@@ -417,11 +441,11 @@ class Tile {
         }
     }
     
-    addTile(type,coords) {
+    addTile(type) {
 
         let color;
-        if (type === "simple" || type === "start" || this.bridges != null) color = 0xf5f5cd;
-        if (type === "fragile") color = 0xfa8072;
+        if (type === "simple" || type === "start" || type === "star" || this.bridges != null) color = 0xf5f5cd;
+        if (type === "fragile") color = 0xff2022;
 
         let x = - this.coords[0] * TILE_SIZE;
         let y = - TILE_WIDTH / 2;
@@ -461,8 +485,6 @@ class Tile {
         let step = 1;
         let game = this.game;
         let tileMesh = this.box;
-
-        console.log(game);
 
         downAnimation();
         
@@ -524,7 +546,7 @@ class Block {
                 movement = [0,-1];
                 break;
             default:
-                return;
+                return false;
         };
 
         let x = movement[0];
@@ -594,9 +616,8 @@ class Block {
 
         }
 
-        console.log("coords", this.coords)
-
         this.renderer.render(this.scene,level.camera); 
+        return true;
 
     }
 
@@ -658,6 +679,7 @@ const HORIZONTAL_DISPLAY = 0.5 * Math.PI;
 
 //     camera.aspect = window.innerWidth / window.innerHeight;
 
+
 //     camera.updateProjectionMatrix();
 
 // }
@@ -668,10 +690,6 @@ listenForMoves();
 
 function listenForMoves() {
     document.addEventListener("keydown", move, false); 
-}
-
-function waitMoveFinish() {
-    document.removeEventListener("keydown", move, false); 
 }
 
 function move(event) {
@@ -699,6 +717,3 @@ function createBox(width,height,depth,color,x,y,z) {
 
     return block;
 }
-
-
-//window.addEventListener('resize', onWindowResize, false);

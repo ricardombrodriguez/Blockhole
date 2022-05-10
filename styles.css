@@ -11,6 +11,30 @@ header {
     line-height: 50px;
 }
 
+.endGame {
+    justify-content: center;
+    position: absolute;
+	top: 10px;
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	display: block;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.modal-dialog {
+    min-width: 700px;
+}
+
+.carousel-item {
+    position: absolute;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+    left: 10%;
+    max-width: 500px;
+}
+
 .tutorial {
     right: 10px;
     text-align: end;
