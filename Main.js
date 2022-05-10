@@ -3,14 +3,15 @@
 /*
 TODO:
 resize event
+wait for move to end
 activate/deactivate bridge (done)
 fragile tile (done)
 down animation (done)
-game/level stats -> current level, moves
+game/level stats -> current level, moves (done)
 lights and shadows (done)
 camera and light position for each level (done)
 block movement/animation (done)
-retry level button
+retry level button (done)
 about/tutorial modal
 */
 
@@ -18,8 +19,6 @@ about/tutorial modal
 class Main {
 
     constructor() {
-        this.moves = 0;
-        //this.stars = ????
         this.game = this.startGame();
     }
 
@@ -34,17 +33,17 @@ class Game {
     constructor() {
 
         
-        const LEVEL1 = {
-            board: [["start", "simple", "simple", "void", "void", "void", "void", "void", "void", "void"],
-            ["simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "void", "void"],
-            ["simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void"],
-            ["void", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple"],
-            ["void", "void", "void", "void", "void", "simple", "simple", "hole", "simple", "simple"],
-            ["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "void"]],
-            camera: [-250,300,-500],
-            light: [-50,300,-500]
-        };
-
+        // const LEVEL1 = {
+        //     board: [["start", "simple", "simple", "void", "void", "void", "void", "void", "void", "void"],
+        //     ["simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "void", "void"],
+        //     ["simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void"],
+        //     ["void", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple"],
+        //     ["void", "void", "void", "void", "void", "simple", "simple", "hole", "simple", "simple"],
+        //     ["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "void"]],
+        //     camera: [-250,300,-500],
+        //     light: [-50,300,-500]
+        // };
+/* 
         
         const LEVEL2 = {
             board: [["void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple", "simple", "void", "void", "void"],
@@ -58,7 +57,7 @@ class Game {
             camera: [-300,350,-530], 
             light: [-1000,700,0] 
         };
-
+ */
         
 
         const LEVEL3 = {
@@ -111,8 +110,8 @@ class Game {
         
 
         this.LEVELS = [
-            LEVEL1,
-            LEVEL2,
+            //LEVEL1,
+            //LEVEL2,
             LEVEL3,
             LEVEL4,
             LEVEL5
@@ -130,6 +129,7 @@ class Game {
 
         // Start level
         this.currentLevel = 0;
+        this.moves = 0;
         this.level = new Level(this.LEVELS[0],this);
 
     }
@@ -141,6 +141,7 @@ class Game {
         } else {
             this.currentLevel += 1;
             this.level = new Level(this.LEVELS[this.currentLevel],this); 
+            document.getElementById("level").innerHTML = this.currentLevel + 1;
         }
     }
 
@@ -164,6 +165,7 @@ class Level {
 
     constructor(info,game) {
 
+        this.levelMoves = 0;
         this.game = game;
         this.board = this.createBoard(this.game.scene,info.board);
 
@@ -205,7 +207,11 @@ class Level {
 
         var keyCode = event.which;  // JS key id
         this.block.setBlockPosition(this, keyCode);
+        this.game.moves += 1;
+        this.levelMoves += 1;
         this.verifyMove();
+        listenForMoves();
+        document.getElementById("moves").innerHTML = this.game.moves;
 
     }
 
@@ -219,6 +225,9 @@ class Level {
             setTimeout(() => {
                 this.game.retryLevel();
             }, 1000);
+
+            this.game.moves -= this.levelMoves  ;
+            this.levelMoves = 0;
 
         } else {
 
@@ -379,12 +388,10 @@ class Tile {
                 let z = - coords[1] * TILE_SIZE;      
 
                 this.boxA = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z);
-                this.boxA.rotation.x = -0.5 * Math.PI; 
-                this.game.scene.add(this.boxA);
+                this.boxA.rotation.y = -0.5 * Math.PI / 2;
 
                 this.boxB = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z);
-                this.boxB.rotation.x = 0.5 * Math.PI; 
-                this.game.scene.add(this.boxB);
+                this.boxB.rotation.y = 0.5 * Math.PI / 2;
 
                 this.game.scene.add(this.boxA);
                 this.game.scene.add(this.boxB);
@@ -413,8 +420,7 @@ class Tile {
     addTile(type,coords) {
 
         let color;
-        if (type === "simple" || this.bridges != null) color = 0xf5f5cd;
-        if (type === "start") color = 0x000000;
+        if (type === "simple" || type === "start" || this.bridges != null) color = 0xf5f5cd;
         if (type === "fragile") color = 0xfa8072;
 
         let x = - this.coords[0] * TILE_SIZE;
@@ -658,6 +664,15 @@ const HORIZONTAL_DISPLAY = 0.5 * Math.PI;
 
 let main = new Main();
 let game = main.game;
+listenForMoves();
+
+function listenForMoves() {
+    document.addEventListener("keydown", move, false); 
+}
+
+function waitMoveFinish() {
+    document.removeEventListener("keydown", move, false); 
+}
 
 function move(event) {
     game.level.moveBlock(event);
@@ -685,6 +700,5 @@ function createBox(width,height,depth,color,x,y,z) {
     return block;
 }
 
-document.addEventListener("keydown", move, false); 
 
 //window.addEventListener('resize', onWindowResize, false);
