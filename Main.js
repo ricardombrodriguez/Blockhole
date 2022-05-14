@@ -360,7 +360,7 @@ class Level {
     // When the block is in void or when fits hole
     blockFall() {
 
-        let step = 1;
+        let step = 2;
         let level = this;
         let scene = this.game.scene;
         let renderer = this.game.renderer;
@@ -372,9 +372,9 @@ class Level {
 
             blockMesh.position.y -= step;
 
-            if (step < 5) step += 0.25;
+            if (step < 10) step += 0.25;
     
-            if  (blockMesh.position.y <= - TILE_SIZE * 2) {
+            if  (blockMesh.position.y <= - TILE_SIZE * 8) {
                 return true;
             }
     
