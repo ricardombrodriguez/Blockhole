@@ -494,7 +494,7 @@ class Tile {
 
             if (step < 5) step += 0.25;
     
-            if  (tileMesh.position.y <= - TILE_SIZE * 2) {
+            if  (tileMesh.position.y <= - TILE_SIZE * 8) {
                 return true;
             }
     
