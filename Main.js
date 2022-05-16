@@ -482,7 +482,7 @@ class Tile {
 
     dropTile() {
 
-        let step = 1;
+        let step = 2;
         let game = this.game;
         let tileMesh = this.box;
 
@@ -492,7 +492,7 @@ class Tile {
 
             tileMesh.position.y -= step;
 
-            if (step < 5) step += 0.25;
+            if (step < 10) step += 0.45;
     
             if  (tileMesh.position.y <= - TILE_SIZE * 8) {
                 return true;
