@@ -31,7 +31,7 @@ class Game {
         const LEVEL2 = {
             board: [["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
             ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", {activator: "vertical" , tiles: [[10,4],[11,4]]}, "simple","void", "void", "simple", "hole", "simple"],
-            ["simple", "simple", {activator: "horizontal" , tiles: [[4,4],[5,4]]}, "simple", "void", "void", "simple", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
+            ["simple", "star", {activator: "horizontal" , tiles: [[4,4],[5,4]]}, "simple", "void", "void", "simple", "simple", "star", "simple","void", "void", "simple", "star", "simple"],
             ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
             ["simple", "start", "simple", "simple", "bridge", "bridge", "simple", "simple", "simple", "simple","bridge", "bridge", "simple", "simple", "simple"],
             ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "simple","void", "void", "void", "void", "void"]],
@@ -40,11 +40,11 @@ class Game {
         };  
 
         const LEVEL3 = {
-            board: [["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "simple","simple", "simple", "simple", "void", "void"],
+            board: [["void", "void", "void", "void", "void", "void", "simple", "simple", "simple", "star","simple", "simple", "simple", "void", "void"],
             ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "void","void", "simple", "simple", "void", "void"],
-            ["simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void","void", "simple", "simple", "simple", "simple"],
+            ["simple", "simple", "simple", "simple", "star", "simple", "simple", "simple", "simple", "void","void", "simple", "simple", "simple", "simple"],
             ["simple", "start", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "hole", "simple"],
-            ["simple", "simple", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "simple", "simple"],
+            ["simple", "simple", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "star", "simple"],
             ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void","void", "void", "simple", "simple", "simple"]],
             camera: [-300,350,-530], 
             light: [180,250,-400] 
@@ -56,10 +56,10 @@ class Game {
             ["void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple", "simple", "void", "void", "void"],
             ["simple", "simple", "simple", "void", "void", "void", "void", "void", "simple", "void","void", "simple", "simple", "simple", "simple"],
             ["simple", "start", "simple", "simple", "simple", "simple", "simple", "simple", "simple", "void","void", "void", "simple", "hole", "simple"],
-            ["simple", "simple", "simple", "void", "void", "void", "void", "simple", "simple", {activator: "vertical" , tiles: [[3,6]]},"void", "void", "simple", "simple", "simple"],
-            ["simple", "simple", "simple", "void", "void", "void", "void", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
+            ["simple", "simple", "simple", "void", "void", "void", "void", "simple", "simple", {activator: "vertical" , tiles: [[3,6]]},"void", "void", "simple", "star", "simple"],
+            ["star", "simple", "simple", "void", "void", "void", "void", "simple", "simple", "simple","void", "void", "simple", "simple", "simple"],
             ["void", "simple", "simple", "bridge", "void", "void", "void", "simple", "void", "void","void", "void", "void", "void", "void"],
-            ["void", "void", "simple", "simple", "simple", "simple", "simple", "simple", "void", "void","void", "void", "void", "void", "void"]],
+            ["void", "void", "simple", "simple", "simple", "star", "simple", "simple", "void", "void","void", "void", "void", "void", "void"]],
             camera: [-300,350,-530], 
             light: [-1000,700,0] 
         };  
@@ -67,12 +67,12 @@ class Game {
         const LEVEL5 = {
             board: [["simple", "simple", "simple", "fragile", "simple", "simple", "simple", "simple", "fragile", "simple","simple", "simple", "simple", "void"],
             ["simple", "simple", "void", "void", "void", "void", "void", "void", "void", "void","simple", "simple", "simple", "void"],
-            ["simple", "simple", "void", "void", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "simple"],
+            ["simple", "simple", "void", "void", "void", "void", "void", "void", "void", "void","void", "simple", "simple", "star"],
             ["simple", "simple", "simple", "void", "void", "void", "simple", "simple", "simple", "void","void", "simple", "start", "simple"],
-            ["simple", "simple", "simple", "fragile", "fragile", "fragile", "simple", "hole", "simple", "void", "void", "simple", "simple", "simple"],
+            ["simple", "simple", "star", "fragile", "fragile", "fragile", "simple", "hole", "simple", "void", "void", "simple", "simple", "simple"],
             ["simple", "simple", "simple", "void", "void", "fragile", "simple", "simple", "simple", "void","void", "simple", "void", "void"],
             ["void", "void", "simple", "void", "void", "fragile", "fragile", "fragile", "fragile", "fragile","simple", "simple", "void", "void"],
-            ["void", "void", "simple", "simple", "simple", "fragile", "fragile", "simple", "fragile", "fragile","fragile", "void", "void", "void"],
+            ["void", "void", "simple", "simple", "simple", "fragile", "fragile", "star", "fragile", "fragile","fragile", "void", "void", "void"],
             ["void", "void", "void", "simple", "simple", "fragile", "fragile", "fragile", "fragile", "fragile","fragile", "void", "void", "void"],
             ["void", "void", "void", "simple", "simple", "simple", "void", "void", "simple", "simple", "void", "void", "void", "void"]],
             camera: [-250,320,-600],
@@ -81,12 +81,12 @@ class Game {
 
         const LEVEL6 = {
             board: [["void", "void", "void", "void", "void", "void", "void", "void", "void", "void","void", "void", {activator: "vertical" , tiles: [[6,4]] }],
-            ["void", "void", "void", "void", "void", "simple", "simple", "simple", "void", "void","simple", "simple", "simple"],
+            ["void", "void", "void", "void", "void", "simple", "simple", "simple", "void", "void","simple", "simple", "star"],
             ["void", "void", "void", "void", "void", "simple", {activator: "vertical" , tiles: [[12,2]]}, "simple", "simple", "simple","simple", "simple", "bridge"],
             ["void", "void", "void", "simple", "simple", "simple", "simple", "simple", "void", "void","simple", "simple", "bridge"],
             ["void", "void", "void", "simple", "hole", "simple", "bridge", "void", "void", "void", "simple", "simple", "void"],
             ["void", "simple", "simple", "simple", "simple", "simple", "void", "void", "void", "simple","simple", "simple", "simple"],
-            ["simple", "simple", "start", "simple", "void", "void", "void", "void", "void", "simple","simple", "simple", "simple"],
+            ["star", "simple", "start", "simple", "void", "void", "void", "void", "void", "simple","simple", "star", "simple"],
             ["simple", "simple", "simple", "simple", "void", "void", "simple", "simple", "simple", "simple","simple", "void", "void"],
             ["void", "void", "void", "void", "void", "simple", "simple", "simple", "void", "void","void", "void", "void"],
             ["void", "void", "void", "void", "void", "simple", "simple", "simple", "void", "void","void", "void", "void"]],
@@ -97,14 +97,44 @@ class Game {
         const LEVEL7 = {
             board: [["void", "void", "simple", "simple", "void", "void", "void", "void", "void", "void","void", "void","void","void"],
             ["void", "void", "simple", "simple", "simple", "void", "void", "void", "void", "void","void", "void","void","void"],
-            ["void", "void", "simple", "simple", {activator: "horizontal" , tiles: [[13,2],[13,3]]}, "void", "void","void", "void", "void","simple", "simple", "simple","bridge"],
+            ["void", "void", "simple", "simple", {activator: "horizontal" , tiles: [[13,2],[13,3]]}, "void", "void","void", "void", "void","simple", "simple", "star","bridge"],
             ["void", "void", "void", "simple", "simple", "simple", "simple", "void", "void", "void","simple", "hole", "simple","bridge"],
-            ["void", "void", "void", "void", "void", "void", "simple", "simple", "bridge", "bridge","simple", "simple", "simple","void"],
+            ["void", "void", "void", "void", "void", "void", "star", "simple", "bridge", "bridge","simple", "simple", "simple","void"],
             ["void", "simple", "simple", "void", "void", "void", "simple", "simple", "void", "void","void", "void", "void","void"],
             ["simple", "simple",  {activator: "vertical" , tiles: [[8,4],[9,4]]}, "simple", "simple", "simple", "simple", "simple", "void", "void","void", "void", "void","void"],
             ["simple", "start", "simple", "void", "void", "void", "simple", "simple", "void", "void","void", "simple", "simple","simple"],
-            ["simple", "simple", "simple", "void", "void", "void", "simple", "simple", "simple", "simple","simple", "simple", "simple","simple"],
+            ["simple", "star", "simple", "void", "void", "void", "simple", "simple", "simple", "simple","simple", "simple", "simple","simple"],
             ["void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "void", "simple", "simple","simple"]],
+            camera: [-250,280,-580],
+            light: [50,450,50]
+        };
+
+        const LEVEL8 = {
+            board: [["void", "simple", "simple", "simple", "bridge", "void", "void", "void", "void", "void","void", "void"],
+            ["void", "simple", "hole", "simple", "bridge", "void", "void", "void", "void", "void","void", "void"],
+            ["void", "simple", "simple", "simple", "void", "void", "void","void", "void", "void","void", "void"],
+            ["void", "simple", "void", "void", "void", "simple", "simple", "simple", "simple", "simple","simple", "void"],
+            ["void", "star", "void", "void", "void", "simple", "simple", "void", "void", "star","simple", "void"],
+            ["start", "simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "simple","simple", "simple"],
+            ["void", "void",  "void", "void", "void", "simple", {activator: "horizontal" , tiles: [[4,0],[4,1]]}, "void", "void", "void","void", "simple"],
+            ["void", "void", "void", "void", "void", "simple", "simple", "simple", "simple", "void","void", "simple"],
+            ["void", "void", "void", "void", "void", "simple", "simple", "simple", "simple", "simple","simple", "simple"],
+            ["void", "void", "void", "void", "void", "void", "void", "void", "simple", "star", "simple", "void"]],
+            camera: [-250,280,-580],
+            light: [50,450,50]
+        };
+
+        const LEVEL9 = {
+            board: [["void", "simple", "simple", "simple", "bridge", "void", "void", "void", "void", "void","void", "void"],
+            ["void", "simple", "hole", "simple", "bridge", "void", "void", "void", "void", "void","void", "void"],
+            ["void", "simple", "simple", "simple", "void", "void", "void","void", "void", "void","void", "void"],
+            ["void", "simple", "void", "void", "void", "simple", "simple", "simple", "simple", "simple","simple", "void"],
+            ["void", "star", "void", "void", "void", "simple", "simple", "void", "void", "star","simple", "void"],
+            ["start", "simple", "simple", "simple", "simple", "simple", "simple", "void", "void", "simple","simple", "simple"],
+            ["void", "void",  "void", "void", "void", "simple", {activator: "horizontal" , tiles: [[4,0],[4,1]]}, "void", "void", "void","void", "simple"],
+            ["void", "void", "void", "void", "void", "simple", "simple", "simple", "simple", "void","void", "simple"],
+            ["void", "void", "void", "void", "void", "simple", "simple", "simple", "simple", "simple","simple", "simple"],
+            ["void", "void", "void", "void", "void", "void", "void", "void", "simple", "star", "simple", "void"]],
             camera: [-250,280,-580],
             light: [50,450,50]
         };
@@ -116,7 +146,9 @@ class Game {
             LEVEL4,
             LEVEL5,
             LEVEL6,
-            LEVEL7
+            LEVEL7,
+            LEVEL8,
+            LEVEL9
         ];
         
         this.main = main;
@@ -219,7 +251,7 @@ class Level {
         this.addSun();
         this.addMoon();
         this.addStars();
-        
+
         let step = 0;
         let sunMesh = this.sunMesh;
         let moonMesh = this.moonMesh;
@@ -227,13 +259,12 @@ class Level {
         let scene = this.game.scene;
         let camera = this.camera;
         let starsMesh = this.starsMesh;
-        console.log("asasasas", this.starsMesh)
 
         animateSpace();
 
         function animateSpace() { 
 
-            step += 0.002; 
+            step += 0.004; 
             sunMesh.position.y = -1500 * Math.sin(step); 
             sunMesh.position.z = -1500 *  Math.cos(step); 
             moonMesh.position.y = 1500 * Math.sin(step); 
@@ -269,6 +300,8 @@ class Level {
         this.sunMesh.position.x = -200;
         this.sunMesh.position.z = 1500;
         this.game.scene.add(this.sunMesh);
+        this.sunLight = new THREE.AmbientLight(0x404040,2);
+        this.game.scene.add(this.sunLight);
     }
 
     addMoon() {
@@ -279,15 +312,16 @@ class Level {
         this.moonMesh.position.x = -200;
         this.moonMesh.position.z = -1500;
         this.game.scene.add(this.moonMesh);
+        this.moonLight = new THREE.AmbientLight(0x404040,0.2);
+        this.game.scene.add(this.moonLight);
     }
 
     addStars() {
-        let starsGeometry = new THREE.SphereGeometry(2000, 32, 32);
+        let starsGeometry = new THREE.SphereGeometry(1500, 32, 32);
         let starsTexture = new THREE.TextureLoader().load("./assets/stars.png");
         let starsMaterial = new THREE.MeshBasicMaterial({ map: starsTexture });
         this.starsMesh = new THREE.Mesh(starsGeometry, starsMaterial);
         this.starsMesh.material.side = THREE.BackSide;
-        this.starsMesh.name = "nightStars"
         this.game.scene.add(this.starsMesh);
     }
 
@@ -330,8 +364,6 @@ class Level {
             } else if (0 < radians && radians <= Math.PI / 4 ||  0 >= radians && radians >= - Math.PI / 4) {
                 this.flag = 3;
             }
-
-            console.log(this.flag);
 
         });
 
@@ -593,7 +625,8 @@ class Tile {
         let y = - TILE_WIDTH / 2;
         let z = - this.coords[1] * TILE_SIZE;
 
-        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,color,x,y,z,"./assets/water.jpg");
+        if (type === "fragile") this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,color,x,y,z,"./assets/lava.jpeg");
+        else this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,color,x,y,z,"./assets/water.jpg");
         this.box.rotation.x = -0.5 * Math.PI; 
 
         if (type === "star") this.addStar();
