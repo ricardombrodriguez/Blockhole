@@ -1,7 +1,3 @@
-import * as THREE from "./node_modules/three/build/three.module.js";
-// import { OrbitControls } from "./node_modules/three/examples/js/controls/OrbitControls.js";
-
-
 
 // ==================== CLASSES/ENTITIES ================== //
 
@@ -149,57 +145,8 @@ class Game {
             main.game.renderer.setSize( window.innerWidth, window.innerHeight );
         }
 
-        this.addSun();
-        this.addMoon();
-        
-        let step = 0;
-        let sunMesh = this.sunMesh;
-        let moonMesh = this.moonMesh;
-        let renderer = this.renderer;
-        let scene = this.scene;
-        let camera = this.level.camera;
-
-        animateSpace();
-
-        function animateSpace() { 
-
-            step += 0.005; 
-            sunMesh.position.y = 1500 * Math.sin(step); 
-            sunMesh.position.z = 1500 *  Math.cos(step); 
-            moonMesh.position.y = -1500 * Math.sin(step); 
-            moonMesh.position.z = -1500 *  Math.cos(step); 
-    
-            // Render using requestAnimationFrame 
-            requestAnimationFrame(animateSpace); 
-            renderer.render(scene, camera); 
-    
-        }
-    
-
     }
     
-
-    addSun() {
-        let sunGeometry = new THREE.SphereGeometry(50);
-        let sunTexture = new THREE.TextureLoader().load("sun.jpg");
-        let sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
-        this.sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
-        this.sunMesh.position.x = -200;
-        this.sunMesh.position.z = 1500;
-        this.scene.add(this.sunMesh);
-        // this.renderer.render(this.scene, this.camera);
-    }
-
-    addMoon() {
-        let moonGeometry = new THREE.SphereGeometry(45);
-        let moonTexture = new THREE.TextureLoader().load("moon.jpg");
-        let moonMaterial = new THREE.MeshBasicMaterial({ map: moonTexture });
-        this.moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
-        this.moonMesh.position.x = -200;
-        this.moonMesh.position.z = -1500;
-        this.scene.add(this.moonMesh);
-    }
-
     nextLevel() {
         this.clearScene();
         if (this.currentLevel + 1 === this.LEVELS.length) {
@@ -250,6 +197,8 @@ class Level {
         this.stars = 0;
         this.game = game;
 
+        this.flag = 1;
+
         this.board = this.createBoard(this.game.scene,info.board);
 
         let [camX,camY,camZ] = info.camera;
@@ -267,6 +216,79 @@ class Level {
             }
         }
 
+        this.addSun();
+        this.addMoon();
+        this.addStars();
+        
+        let step = 0;
+        let sunMesh = this.sunMesh;
+        let moonMesh = this.moonMesh;
+        let renderer = this.game.renderer;
+        let scene = this.game.scene;
+        let camera = this.camera;
+        let starsMesh = this.starsMesh;
+        console.log("asasasas", this.starsMesh)
+
+        animateSpace();
+
+        function animateSpace() { 
+
+            step += 0.002; 
+            sunMesh.position.y = -1500 * Math.sin(step); 
+            sunMesh.position.z = -1500 *  Math.cos(step); 
+            moonMesh.position.y = 1500 * Math.sin(step); 
+            moonMesh.position.z = 1500 *  Math.cos(step); 
+
+            if (sunMesh.position.y > 0) {
+                // sunny
+                renderer.setClearColor(new THREE.Color(0x87CEEB ));
+                starsMesh.visible = false;
+            } else {
+                // night
+
+                renderer.setClearColor(new THREE.Color(0x010000 ));
+                starsMesh.visible = true;
+
+            }
+    
+            // Render using requestAnimationFrame 
+            requestAnimationFrame(animateSpace); 
+            renderer.render(scene, camera); 
+    
+        }
+    
+
+    }
+
+
+    addSun() {
+        let sunGeometry = new THREE.SphereGeometry(70, 32, 32);
+        let sunTexture = new THREE.TextureLoader().load("./assets/sun.jpg");
+        let sunMaterial = new THREE.MeshBasicMaterial({ map: sunTexture });
+        this.sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+        this.sunMesh.position.x = -200;
+        this.sunMesh.position.z = 1500;
+        this.game.scene.add(this.sunMesh);
+    }
+
+    addMoon() {
+        let moonGeometry = new THREE.SphereGeometry(55, 32, 32);
+        let moonTexture = new THREE.TextureLoader().load("./assets/moon.jpg");
+        let moonMaterial = new THREE.MeshBasicMaterial({ map: moonTexture });
+        this.moonMesh = new THREE.Mesh(moonGeometry, moonMaterial);
+        this.moonMesh.position.x = -200;
+        this.moonMesh.position.z = -1500;
+        this.game.scene.add(this.moonMesh);
+    }
+
+    addStars() {
+        let starsGeometry = new THREE.SphereGeometry(2000, 32, 32);
+        let starsTexture = new THREE.TextureLoader().load("./assets/stars.png");
+        let starsMaterial = new THREE.MeshBasicMaterial({ map: starsTexture });
+        this.starsMesh = new THREE.Mesh(starsGeometry, starsMaterial);
+        this.starsMesh.material.side = THREE.BackSide;
+        this.starsMesh.name = "nightStars"
+        this.game.scene.add(this.starsMesh);
     }
 
     setCamera(x,y,z) {
@@ -283,10 +305,38 @@ class Level {
         this.game.scene.add(this.camera);
         
         // Set camera controlls
-        // this.controls = new OrbitControls(this.camera, this.game.renderer.domElement);
-        // this.controls.rotateSpeed = 2;
+        this.controls = new THREE.OrbitControls(this.camera, this.game.renderer.domElement);
+        this.controls.target = new THREE.Vector3(centerPoint[0],centerPoint[1],centerPoint[2]);
+        this.controls.rotateSpeed = 0.5;
+        this.controls.minDistance = 200;
+        this.controls.maxDistance = 1000;
+        this.controls.panSpeed = 0.05;
+        this.controls.keys = [];
+
+        this.controls.update();
+
+        this.controls.addEventListener('change', () => {
+
+            if (this.camera.position.y < 0) this.camera.position.y = 0;
+
+            let radians = this.controls.getAzimuthalAngle()
+
+            if (radians >= Math.PI - Math.PI / 4 || radians <= -Math.PI + Math.PI / 4) {
+                this.flag = 1;
+            } else if (- Math.PI + Math.PI / 4 < radians && radians <= - Math.PI / 4) {
+                this.flag = 4;
+            } else if (Math.PI - Math.PI / 4 > radians && radians > Math.PI / 4) {
+                this.flag = 2;
+            } else if (0 < radians && radians <= Math.PI / 4 ||  0 >= radians && radians >= - Math.PI / 4) {
+                this.flag = 3;
+            }
+
+            console.log(this.flag);
+
+        });
 
     }
+
 
     setLight(x,y,z) {
         this.light = new THREE.SpotLight(0xffffff);
@@ -344,13 +394,9 @@ class Level {
     }
 
     verifyStar() {
-
-        console.log("verify star")
-
         for (let coord of this.block.coords) {
 
             if (this.board[coord[1]]?.[coord[0]]?.type === "star" && this.board[coord[1]]?.[coord[0]]?.star != undefined) {
-                console.log("valor",this.board[coord[1]]?.[coord[0]]?.star)
                 this.game.scene.remove(this.board[coord[1]]?.[coord[0]]?.star);
                 this.stars += 1;
                 document.getElementById("stars").innerHTML = this.stars;
@@ -430,7 +476,7 @@ class Level {
                 let renderedTile = new Tile(this.game,tileType,coords,bridges);
                 renderedTileRow.push(renderedTile);
                 if (tileType === "start") {
-                    this.block = new Block(scene,this.game.renderer,coords);
+                    this.block = new Block(this,scene,this.game.renderer,coords);
                 } else if (tileType === "hole") {
                     this.hole = renderedTile;
                 } 
@@ -505,10 +551,10 @@ class Tile {
                 let y = - TILE_WIDTH / 2;
                 let z = - coords[1] * TILE_SIZE;      
 
-                this.boxA = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z,"./water.jpg");
+                this.boxA = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z,"./assets/cells.jpg");
                 this.boxA.rotation.y = -0.5 * Math.PI / 2;
 
-                this.boxB = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z,"./water.jpg");
+                this.boxB = createBox(TILE_SIZE-1,10,TILE_WIDTH+1,0x00ff11,x,y,z,"./assets/cells.jpg");
                 this.boxB.rotation.y = 0.5 * Math.PI / 2;
 
                 this.game.scene.add(this.boxA);
@@ -518,8 +564,10 @@ class Tile {
 
             if (type === "horizontal") {
 
+                const loader = new THREE.CubeTextureLoader();
+                const textureCube = loader.load( Array(6).fill("./assets/marble.jpeg") );
                 let geometry = new THREE.CylinderGeometry( TILE_SIZE/2-5, TILE_SIZE/2-5, TILE_WIDTH+5, 62 );
-                let material = new THREE.MeshPhongMaterial( {color: 0x1111ee} );
+                let material = new THREE.MeshPhongMaterial( {color: 0x1111ee, envMap: textureCube} );
                 let cylinder = new THREE.Mesh( geometry, material );
 
                 cylinder.position.x = - coords[0] * TILE_SIZE;
@@ -545,7 +593,7 @@ class Tile {
         let y = - TILE_WIDTH / 2;
         let z = - this.coords[1] * TILE_SIZE;
 
-        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,color,x,y,z,"./water.jpg");
+        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,color,x,y,z,"./assets/water.jpg");
         this.box.rotation.x = -0.5 * Math.PI; 
 
         if (type === "star") this.addStar();
@@ -558,13 +606,9 @@ class Tile {
         let [x,z] = this.coords;
 
         let geometry = new THREE.OctahedronGeometry(10, 1);
-        let material = new THREE.MeshPhongMaterial( {color: 0x0000ee} );
-
-        console.log("antes", this.star)
+        let material = new THREE.MeshPhongMaterial( {color: 0x0000ee, wireframe: true} );
 
         this.star = new THREE.Mesh( geometry, material );
-
-        console.log("dep", this.star)
 
         this.star.position.x = - x * TILE_SIZE;
         this.star.position.y = 20;
@@ -607,7 +651,7 @@ class Tile {
         let y = - TILE_WIDTH / 2;
         let z = - this.coords[1] * TILE_SIZE;
 
-        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,0x26705c,x,y,z,"./wood.jpg");
+        this.box = createBox(TILE_SIZE,TILE_SIZE,TILE_WIDTH,0x26705c,x,y,z,"./assets/green.jpg");
         this.box.rotation.x = -0.5 * Math.PI; 
         this.game.scene.add(this.box);
 
@@ -653,7 +697,8 @@ class Tile {
 
 class Block {
 
-    constructor(scene,renderer,coords) {
+    constructor(level,scene,renderer,coords) {
+        this.level = level;
         this.coords = [coords];
         this.renderer = renderer;
         this.scene = scene;
@@ -666,7 +711,7 @@ class Block {
         let y = TILE_SIZE;
         let z = - this.coords[0][1] * TILE_SIZE;
 
-        this.block = createBox(TILE_SIZE,TILE_SIZE*2,TILE_SIZE,0x991199,x,y,z,"./wood.jpg");
+        this.block = createBox(TILE_SIZE,TILE_SIZE*2,TILE_SIZE,0xffffff,x,y,z,"./assets/wood.jpg");
         scene.add(this.block);
 
     }  
@@ -676,18 +721,27 @@ class Block {
 
         let movement = [];
 
+        let movementsPerFlag = [
+            [[1,0],[-1,0],[0,1],[0,-1]],
+            [[0,1],[0,-1],[-1,0],[1,0]],
+            [[-1,0],[1,0],[0,-1],[0,1]],
+            [[0,-1],[0,1],[1,0],[-1,0]]
+        ];
+
+        let flag = this.level.flag - 1;
+
         switch(keyCode) {
             case ACTIONS["KEY_LEFT"]:
-                movement = [1,0];
+                movement = movementsPerFlag[flag][0];
                 break;
             case ACTIONS["KEY_RIGHT"]:
-                movement = [-1,0];
+                movement = movementsPerFlag[flag][1];
                 break;
             case ACTIONS["KEY_UP"]:
-                movement = [0,1];
+                movement = movementsPerFlag[flag][2];
                 break;
             case ACTIONS["KEY_DOWN"]:
-                movement = [0,-1];
+                movement = movementsPerFlag[flag][3];
                 break;
             default:
                 return false;
@@ -760,7 +814,7 @@ class Block {
 
         }
 
-        this.renderer.render(this.scene,level.camera); 
+        // this.renderer.render(this.scene,level.camera); 
         return true;
 
     }

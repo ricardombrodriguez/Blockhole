@@ -11,6 +11,10 @@ header {
     line-height: 50px;
 }
 
+canvas {
+    display: block;
+}
+
 .endGame {
     justify-content: center;
     position: absolute;
